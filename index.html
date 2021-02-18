@@ -54,7 +54,8 @@ if(window.location.hash) {
         document.getElementById("txt").focus()
     }
 } else {
-    document.getElementById("txt").focus()
+    window.location.hash = "jwblTdgEDKAqCCUKIBl4QmAcgeQZAEjAJQEl0BxMACgDsAGAFwFMBnAOgHMBLOgCwFcAjFhwD2ASgA8-AE4A+SbPkzAvBuBJHbAAhAIZMOAY00AbAwE8wTOsKkMwAPwBMAazC7umqZt2MpTMBypgea00AE2CrJh9+NxZFRSVAYD2wAA1UAFomTQAzBgAaMzpNRgNmJjyqYTMGKQA3KrBLMCjdBwYqYJjpOU6lQGE9sABNZjzjYV5nTX9eJmteKQMzbks6KirI3joA1w3ghmzC5k3rAAdhPzoOhU7FYEBI-cgCqQ3ygHdG0wZgrj82TY4fRgAHnQAISxTpAA";
+    document.getElementById("txt").innerHTML = DOMPurify.sanitize(LZString.decompressFromEncodedURIComponent(window.location.hash.slice(1)))
 }
 
 </script>
