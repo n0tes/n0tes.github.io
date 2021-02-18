@@ -8,7 +8,7 @@
 <style>
 @font-face {
     font-family: Nunito;
-    src: url(nunito.ttf);
+    src: url(nunito.ttf?1);
 }
 body {
     background-color: #2c2f33;
@@ -35,11 +35,11 @@ textarea {
 }
 </style>
 </head>
-<script type="text/javascript" src="purify.min.js"></script>
-<script language="javascript" src="lz-string.min.js"></script>
+<script type="text/javascript" src="purify.min.js?1"></script>
+<script language="javascript" src="lz-string.min.js?1"></script>
 <body>
 <div class="fbx">
-<textarea spellcheck="false" oninput="a()" id="txt" style="height: 50rem; width: calc(100% - 2rem);"></textarea>
+<textarea spellcheck="false" tabindex="0" oninput="a()" id="txt" style="height: 50rem; width: calc(100% - 2rem);"></textarea>
 </div>
 <script>
 function a() {
@@ -48,7 +48,11 @@ function a() {
 if(window.location.hash) {
    try {
         document.getElementById("txt").value = DOMPurify.sanitize(LZString.decompressFromEncodedURIComponent(window.location.hash.slice(1)))
-    } catch(err) {}
+    } catch(err) {
+        document.getElementById("txt").focus()
+    }
+} else {
+    document.getElementById("txt").focus()
 }
 
 </script>
