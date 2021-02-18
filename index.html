@@ -18,12 +18,12 @@ body {
 }
 .fbx {
 	width: 100%;
-    margin-top: 5rem;
+    margin-top: 2rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
-textarea {
+p {
     background-color: transparent;
     color: white;
     font-family: Nunito;
@@ -31,23 +31,25 @@ textarea {
     border: none!important;
     box-shadow: none!important;
     outline: none;
+    caret-color: transparent;
     text-align: center;
 }
 </style>
 </head>
-<script type="text/javascript" src="purify.min.js?1"></script>
-<script language="javascript" src="lz-string.min.js?1"></script>
+<script type="text/javascript" src="purify.min.js?2"></script>
+<script language="javascript" src="lz-string.min.js?2"></script>
 <body>
 <div class="fbx">
-<textarea spellcheck="false" tabindex="0" oninput="a()" id="txt" style="height: 50rem; width: calc(100% - 2rem);"></textarea>
+<p contenteditable spellcheck="false" tabindex="0" oninput="a()" id="txt" style="min-height: 80vh; width: calc(100% - 2rem);"></p>
 </div>
 <script>
 function a() {
-    window.location.hash = LZString.compressToEncodedURIComponent(document.getElementById("txt").value)
+    document.getElementById("txt").style.caretColor = "unset";
+    window.location.hash = LZString.compressToEncodedURIComponent(document.getElementById("txt").innerHTML)
 }
 if(window.location.hash) {
    try {
-        document.getElementById("txt").value = DOMPurify.sanitize(LZString.decompressFromEncodedURIComponent(window.location.hash.slice(1)))
+        document.getElementById("txt").innerHTML = DOMPurify.sanitize(LZString.decompressFromEncodedURIComponent(window.location.hash.slice(1)))
     } catch(err) {
         document.getElementById("txt").focus()
     }
