@@ -47,7 +47,9 @@ async function getprice(usd) {
   return (usd / dat["EUR"]["15m"]).toFixed(8);
 }
 var hash = window.location.hash.substr(1);
-
+if(!hash.includes("to=")) {
+    hash = atob(hash);
+}
 var result = hash.split('&').reduce(function (result, item) {
     var parts = item.split('=');
     result[parts[0]] = parts[1];
