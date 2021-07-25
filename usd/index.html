@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Payment</title>
+<style>
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: rgb(41, 41, 46);
+    color: white;
+}
+p {
+    font-size: 1.2rem;
+}
+#howm {
+    color: rgb(136, 197, 255);
+    font-size: calc(0.5vw + 0.8rem);
+}
+#desa {
+    color: rgb(255, 136, 229);
+    font-size: calc(0.5vw + 0.8rem);
+}
+</style>
+</head>
+<body>
+    <center>
+        <h1>Bitcoin Payment</h1>
+        <h4>Of USD $<span id="usval"></span></h4>
+        <div class="container">
+            <img style="border-radius: 5px;" id="imab" src="" alt="">
+            
+            <p>Send<br><strong><code id="howm"></code></strong><br>BTC to<br><strong>
+            <code id="desa"></code>
+            </strong></p>
+            <br>
+            <p>And let me know once done.</p>
+            </div>
+    </center>
+
+<script>
+async function getprice(usd) {
+  const res = await fetch('https://blockchain.info/ticker?a=' + Date.now().toString());
+  const dat = await res.json();
+  return (usd / dat["USD"]["15m"]).toFixed(8);
+}
+var hash = window.location.hash.substr(1);
+
+var result = hash.split('&').reduce(function (result, item) {
+    var parts = item.split('=');
+    result[parts[0]] = parts[1];
+    return result;
+}, {});
+document.getElementById("desa").innerHTML = result.to;
+document.getElementById("usval").innerHTML = result.usd;
+
+function setit() {
+    getprice(result.usd).then(function (btc_total) {
+        document.getElementById("imab").src = "https://chart.googleapis.com/chart?cht=qr&chs=250&choe=UTF-8&chl=" +encodeURIComponent("bitcoin:" + result["to"] + "?amount=" + btc_total + "&label=Payment");
+        document.getElementById("howm").innerHTML = btc_total;
+    })
+}
+setInterval(function(){
+    setit();
+}, 1000 * 30);
+setit();
+</script>
+</body>
+</html>
