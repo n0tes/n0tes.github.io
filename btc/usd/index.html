@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin Payment</title>
+<style>
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: rgb(41, 41, 46);
+    color: white;
+}
+p {
+    font-size: 1.2rem;
+}
+#howm {
+    color: rgb(136, 197, 255);
+    font-size: calc(0.5vw + 0.8rem);
+}
+#desa {
+    color: rgb(255, 136, 229);
+    font-size: calc(0.5vw + 0.8rem);
+}
+</style>
+</head>
+<body>
+    <center>
+        <h1>Bitcoin Payment</h1>
+        <div id="cfg">
+            <h3>Enter USD:</h3>
+            <input oninput="checkvalid()" type="text" id="amoval" value="1200" style="background-color: #454b53;border: 0; color: white;font-size: 1.5rem;width: 6rem;text-align: center;padding: 0.5rem;border-radius: 5px;" onkeypress="getsel(event); return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 20)">
+            <br><br>
+            <button id="gobtn" onclick="setprice()" style="cursor: pointer; border: 0; padding: 0.5rem; font-size: 1.4rem; background-color: #396fc4; color: white; border-radius: 10px; padding-left: 2.25rem; padding-right: 2.25rem;">Pay</button>            
+            <h4 id="erx" style="display: none;"><br><br>Must be more than $<span id="origp"></span></h4>
+        </div>
+<div id="pay" style="display: none;">
+    <h4>Of USD $<span id="usval"></span></h4>
+    <div class="container">
+        <img style="border-radius: 5px;" id="imab" src="" alt="">
+        
+        <p>Send<br><strong><code id="howm"></code></strong><br>BTC to<br><strong>
+        <code id="desa"></code>
+        </strong></p>
+        <br>
+        <p>And let me know once done.</p>
+        <!-- <span onclick="window.location.reload()" style="cursor: pointer; color: rgb(89, 89, 97); font-size: 0.8rem;">Edit price</span> -->
+        </div>
+</div>
+
+    </center>
+
+<script>
+function getsel(e) {
+    if (e.keyCode === 13) {
+        document.getElementById("gobtn").click();
+    }
+}
+async function getprice(usd) {
+  const res = await fetch('https://blockchain.info/ticker?a=' + Date.now().toString());
+  const dat = await res.json();
+  return (usd / dat["USD"]["15m"]).toFixed(8);
+}
+var hash = window.location.hash.substr(1);
+if(!hash.includes("to=")) {
+    hash = atob(hash);
+}
+var result = hash.split('&').reduce(function (result, item) {
+    var parts = item.split('=');
+    result[parts[0]] = parts[1];
+    return result;
+}, {});
+var usdval = result.usd;
+document.getElementById("origp").innerHTML = result.usd;
+
+document.getElementById("desa").innerHTML = result.to;
+document.getElementById("usval").innerHTML = usdval;
+function checkvalid() {
+    let amoval = document.getElementById("amoval").value;
+
+    if(parseInt(amoval) < parseInt(document.getElementById("origp").innerText)) {
+        document.getElementById("gobtn").disabled = true;
+        document.getElementById("gobtn").style.backgroundColor = "#7f848c";
+        document.getElementById("erx").style.display = "unset";
+        setTimeout(() => {
+            document.getElementById("erx").style.display = "none";
+        }, 2000);
+        } else {
+        document.getElementById("gobtn").disabled = false;
+        document.getElementById("gobtn").style.backgroundColor = "#396fc4";
+        document.getElementById("usval").innerHTML = amoval;
+        usdval = amoval
+
+    }
+
+}
+
+
+function setit() {
+    getprice(document.getElementById("usval").innerText).then(function (btc_total) {
+        document.getElementById("imab").src = "https://chart.googleapis.com/chart?cht=qr&chs=250&choe=UTF-8&chl=" +encodeURIComponent("bitcoin:" + result["to"] + "?amount=" + btc_total + "&label=Payment");
+        document.getElementById("howm").innerHTML = btc_total;
+    })
+}
+setInterval(function(){
+    setit();
+}, 1000 * 30);
+setit();
+function setprice() {
+    let amoval = document.getElementById("amoval").value;
+
+
+if(parseInt(amoval) >= parseInt(document.getElementById("origp").innerText)) {
+    document.getElementById("pay").style.display = "unset";
+    document.getElementById("cfg").style.display = "none"
+    document.getElementById("gobtn").disabled = false;
+        document.getElementById("gobtn").style.backgroundColor = "#396fc4";
+        document.getElementById("usval").innerHTML = amoval;
+        usdval = amoval;
+        setit();
+} else {
+    document.getElementById("gobtn").disabled = true;
+        document.getElementById("gobtn").style.backgroundColor = "#7f848c";
+        document.getElementById("erx").style.display = "unset";
+        setTimeout(() => {
+            document.getElementById("erx").style.display = "none";
+        }, 2000);
+
+
+}
+}
+</script>
+</body>
+</html>
+
