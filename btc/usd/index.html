@@ -30,7 +30,7 @@ p {
         <h1>Bitcoin Payment</h1>
         <div id="cfg">
             <h3>Enter USD:</h3>
-            <input oninput="checkvalid()" type="text" id="amoval" value="1200" style="background-color: #454b53;border: 0; color: white;font-size: 1.5rem;width: 6rem;text-align: center;padding: 0.5rem;border-radius: 5px;" onkeypress="getsel(event); return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 20)">
+            <input oninput="checkvalid()" type="text" id="amoval" value="0" style="background-color: #454b53;border: 0; color: white;font-size: 1.5rem;width: 6rem;text-align: center;padding: 0.5rem;border-radius: 5px;" onkeypress="getsel(event); return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57) || event.charCode === 20)">
             <br><br>
             <button id="gobtn" onclick="setprice()" style="cursor: pointer; border: 0; padding: 0.5rem; font-size: 1.4rem; background-color: #396fc4; color: white; border-radius: 10px; padding-left: 2.25rem; padding-right: 2.25rem;">Pay</button>            
             <h4 id="erx" style="display: none;"><br><br>Must be more than $<span id="origp"></span></h4>
@@ -76,6 +76,7 @@ document.getElementById("origp").innerHTML = result.usd;
 
 document.getElementById("desa").innerHTML = result.to;
 document.getElementById("usval").innerHTML = usdval;
+  document.getElementById("amoval").value = usdval;  
 function checkvalid() {
     let amoval = document.getElementById("amoval").value;
 
